@@ -1,0 +1,16 @@
+easy_1,Dragan,30,5
+easy_1,Unknown Warrior,340,4
+easy_1,Gambling Degenerate,100,18
+easy_2,Dragan,60,11
+easy_2,Ana,100,7
+easy_2,Bogdan,20,18
+easy_1,Tvoja Mama,7,6
+easy_1,ana,11,7
+easy_1,Unknown Hero,20,8
+easy_1,cuck chair,146,13
+easy_1,Unknown Hero,4,6
+easy_1,a_stan,17,8
+easy_1,Unknown Warrior,872,6
+easy_1,Unknown Warrior,21,10
+easy_1,Wiiiiiiiiii,4,6
+easy_1,Unknown Warrior,15,9
