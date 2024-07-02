@@ -3,6 +3,7 @@ package minesweeper.scenes
 import minesweeper.*
 import minesweeper.isometrics.*
 import minesweeper.models.{Easy, Hard, Level, Medium}
+import scalafx.Includes.*
 import scalafx.collections.ObservableBuffer
 import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
@@ -10,6 +11,7 @@ import scalafx.scene.control.*
 import scalafx.scene.layout.{BorderPane, GridPane, HBox, VBox}
 
 import java.io.PrintWriter
+import scala.language.postfixOps
 
 class EditScene(level: Level) extends Scene {
     private val levelTitle = new Label() {
@@ -119,65 +121,25 @@ class EditScene(level: Level) extends Scene {
         alignmentInParent = Pos.Center
     }
 
-    private val newIsometryButton: Button = new Button("New Isometry") {
-        minWidth = 80
-        minHeight = 50
-        alignmentInParent = Pos.Center
-    }
-
-    private val advancedIsometryButton = new Button("Advanced") {
-        minWidth = 80
-        minHeight = 50
-        alignmentInParent = Pos.Center
-    }
-
-    private val advancedChainInvertSelection = new ComboBox[String]() {
-        items = ObservableBuffer("Invert", "Chain")
-        promptText = "Choose Action"
-    }
-
-    private val advancedInvertSelectIsometry = new ComboBox[Isometry] {
-        items = ObservableBuffer(Isometry.allIsometries: _*)
-        promptText = "Choose Isometry"
-    }
-
-    private val advancedInvertConfirmButton = new Button("Confirm") {
-        minWidth = 80
-        minHeight = 30
-        alignmentInParent = Pos.Center
-    }
-
-    private val advancedChainSelectIsometry = new ComboBox[Isometry] {
-        items = ObservableBuffer(Isometry.allIsometries: _*)
-        promptText = "Choose Isometry"
-    }
-
-    private val advancedChainSelectSecond = new ComboBox[Isometry] {
-        items = ObservableBuffer(Isometry.allIsometries: _*)
-        promptText = "Choose Isometry"
-    }
-
-    private val advancedChainButton = new Button("Chain") {
-        minWidth = 80
-        minHeight = 30
-        alignmentInParent = Pos.Center
-    }
-
-    private val advancedCancelButton = new Button("Cancel") {
-        minWidth = 80
-        minHeight = 30
-        alignmentInParent = Pos.Center
-    }
-
-    private val applyIsometryButton = new Button("Apply") {
-        minWidth = 80
-        minHeight = 50
-        alignmentInParent = Pos.Center
-    }
-
     private val chooseIsometry = new ComboBox[Isometry] {
         items = ObservableBuffer(Isometry.allIsometries: _*)
         promptText = "Choose Isometry"
+    }
+
+    private val chooseExpansion = new CheckBox("Expanding")
+
+    private val chooseTransparency = new CheckBox("Transparent")
+
+    private val invert = new CheckBox("Invert")
+
+    private val chooseRotationDirection = new ComboBox[RotationDirection] {
+        items = ObservableBuffer(Clockwise, Counterclockwise)
+        promptText = "Choose Rotation Direction"
+    }
+
+    private val chooseIsometryDirection = new ComboBox[IsometryDirection] {
+        items = ObservableBuffer(Row, Column, Diagonal, Antidiagonal)
+        promptText = "Choose Isometry Direction"
     }
 
     private val chooseSection = new Button("Choose Section") {
@@ -192,60 +154,64 @@ class EditScene(level: Level) extends Scene {
         alignmentInParent = Pos.Center
     }
 
-    private val applyConfirmIsometryButton = new Button("Apply") {
+    private val applyIsometryButton = new Button("Apply") {
         minWidth = 80
         minHeight = 30
         alignmentInParent = Pos.Center
     }
 
-    private val applyIsometryCancelButton = new Button("Cancel") {
+    private val composeButton = new Button("Compose") {
         minWidth = 80
         minHeight = 30
         alignmentInParent = Pos.Center
     }
 
-    private val isometryCancelButton = new Button("Cancel") {
-        minWidth = 80
-        minHeight = 50
-        alignmentInParent = Pos.Center
-    }
-
-    private val newIsometryName = new TextField {
-        promptText = "Name"
-    }
-
-    private val isometryType: ComboBox[IsometryType] = new ComboBox[IsometryType] {
-        items = ObservableBuffer(Rotation, AxialReflection)
-        value = Rotation
-    }
-
-    private val isometryDirectionBox = new ComboBox[IsometryDirection] {
-        items = ObservableBuffer(Field)
-        promptText = "Choose Axis Direction"
-    }
-
-    private val isometryExpansionType = new ComboBox[IsometryExpansionType] {
-        items = ObservableBuffer(Expanding, NonExpanding)
-        value = Expanding
-    }
-
-    private val isometryTransparencyType = new ComboBox[IsometryTransparencyType] {
-        items = ObservableBuffer(Transparent, NonTransparent)
-        value = Transparent
-    }
-
-    private val isometryRotationDirection = new ComboBox[RotationDirection] {
-        items = ObservableBuffer(Clockwise, Counterclockwise)
-        promptText = "Choose Rotation Direction"
-    }
-
-    private val newIsometryConfirmButton = new Button("Confirm") {
+    private val composeCancelButton = new Button("Cancel") {
         minWidth = 80
         minHeight = 30
         alignmentInParent = Pos.Center
     }
 
-    private val newIsometryCancelButton = new Button("Cancel") {
+    private val compositionName = new TextField {
+        promptText = "Composition Name"
+    }
+
+    private val composeChooseIsometry = new ComboBox[Isometry] {
+        items = ObservableBuffer(Isometry.allIsometries: _*)
+        promptText = "Choose Isometry"
+        maxWidth = 130
+    }
+
+    private val composeChainBox = new HBox(composeChooseIsometry) {
+        spacing = 20
+        alignment = Pos.Center
+    }
+
+    private val composeConfirmButtom = new Button("Confirm") {
+        minWidth = 80
+        minHeight = 30
+        alignmentInParent = Pos.Center
+    }
+
+    private val cancelIsometryButton = new Button("Cancel") {
+        minWidth = 80
+        minHeight = 30
+        alignmentInParent = Pos.Center
+    }
+
+    private val cancelApplyingIsometry = new Button("Cancel") {
+        minWidth = 80
+        minHeight = 30
+        alignmentInParent = Pos.Center
+    }
+
+    private val confirmIsometryButton = new Button("Confirm") {
+        minWidth = 80
+        minHeight = 30
+        alignmentInParent = Pos.Center
+    }
+
+    private val nextIsometryButton = new Button("Next") {
         minWidth = 80
         minHeight = 30
         alignmentInParent = Pos.Center
@@ -303,12 +269,19 @@ class EditScene(level: Level) extends Scene {
     }
     private var selectMode = false
     private var addMode = false
+
     private var isometryDirection: IsometryDirection = Field
     private var applyingIsometry = false
     private var isometryPivot: Option[Point] = None
     private var chooseSectorMode = false
     private var sectorFirstPoint: Option[Point] = None
     private var sectorSecondPoint: Option[Point] = None
+
+    private var isometryTypeList: Option[List[Isometry]] = None
+    private var isometryArgsList: List[IsometryArgs] = List()
+
+    private var composeChain: List[Isometry] = List()
+    private var lastComposeComboBox: ComboBox[Isometry] = composeChooseIsometry
 
     // Initialization
     levelTitle.text = s"Base level: ${level.name}"
@@ -388,7 +361,7 @@ class EditScene(level: Level) extends Scene {
     }
 
     private def handleRightClick(row: Int, col: Int): Unit = {
-        if (!applyingIsometry) {
+        if (!applyingIsometry || isometryDirection == null) {
             return
         }
 
@@ -567,11 +540,68 @@ class EditScene(level: Level) extends Scene {
         }
     }
 
-    private def updateAllIsometries(): Unit = {
+    private def setBottomText(text: String): Unit = {
+        errorLabel.text = text
+        errorLabel.style = "-fx-font-size: 16pt;"
+    }
+
+    private def clearBottomText(): Unit = {
+        errorLabel.text = ""
+        errorLabel.style = "-fx-font-size: 16pt; -fx-text-fill: red;"
+    }
+
+    private def clearIsometryView(clearSector: Boolean): Unit = {
+        chooseIsometry.value = null
+        chooseExpansion.selected = false
+        chooseTransparency.selected = false
+        if (clearSector) {
+            sectorFirstPoint = None
+            sectorSecondPoint = None
+            removeSectors()
+        }
+    }
+
+    private def clearApplyIsometryView(clearSector: Boolean): Unit = {
+        isometryTypeList = None
+        isometryArgsList = List()
+        isometryPivot = None
+        applyingIsometry = false
+        invert.selected = false
+
+        clearAllSelectedFields()
+        clearIsometryView(clearSector)
+    }
+
+    private def onComposeChain(): Unit = {
+        if (lastComposeComboBox.value == null || lastComposeComboBox.value.value == null) {
+            return
+        }
+
+        composeChain :+= lastComposeComboBox.value.value
+
+        val newComboBox = new ComboBox[Isometry] {
+            items = ObservableBuffer(Isometry.allIsometries: _*)
+            promptText = "Choose Isometry"
+            maxWidth = 130
+            onAction = _ => {
+                onComposeChain()
+            }
+        }
+
+        composeChainBox.children.add(newComboBox)
+        lastComposeComboBox = newComboBox
+    }
+
+    private def clearComposeView(): Unit = {
+        composeChain = List()
+        lastComposeComboBox = composeChooseIsometry
+        compositionName.text = ""
+        composeChooseIsometry.value = null
+    }
+
+    private def updateIsometries(): Unit = {
         chooseIsometry.items = ObservableBuffer(Isometry.allIsometries: _*)
-        advancedInvertSelectIsometry.items = ObservableBuffer(Isometry.allIsometries: _*)
-        advancedChainSelectIsometry.items = ObservableBuffer(Isometry.allIsometries: _*)
-        advancedChainSelectSecond.items = ObservableBuffer(Isometry.allIsometries: _*)
+        composeChooseIsometry.items = ObservableBuffer(Isometry.allIsometries: _*)
     }
 
     // View change functions
@@ -591,33 +621,38 @@ class EditScene(level: Level) extends Scene {
         bottomButtons.children.addAll(selectModeClearButton, selectModeCancelButton)
     }
 
-    private def isometricsView(): Unit = {
+    private def isometryView(): Unit = {
+        chooseIsometry.items = ObservableBuffer(Isometry.allIsometries: _*)
         bottomButtons.children.clear()
-        bottomButtons.children.addAll(newIsometryButton, advancedIsometryButton, applyIsometryButton, isometryCancelButton)
-    }
 
-    private def newIsometryView(): Unit = {
-        bottomButtons.children.clear()
+        val expansionTransparencyVBox = new VBox(chooseExpansion, chooseTransparency) {
+            spacing = 10
+            alignment = Pos.CenterLeft
+        }
+
         bottomButtons.children.addAll(
-            new VBox(
-                new HBox(isometryType, isometryDirectionBox, isometryExpansionType, isometryTransparencyType, isometryRotationDirection) {
-                    spacing = 40
-                    alignment = Pos.Center
-                },
-                new HBox(newIsometryName, newIsometryConfirmButton, newIsometryCancelButton) {
-                    spacing = 40
-                    alignment = Pos.Center
-                }
-            ) {
-                spacing = 20
-                alignment = Pos.Center
-            },
+            chooseIsometry, expansionTransparencyVBox, chooseSection,
+            applyIsometryButton, composeButton, cancelIsometryButton
         )
     }
 
-    private def applyIsometryView(): Unit = {
+    private def applyingIsometryView(isometry: Isometry): Unit = {
+        val isLast = isometryTypeList.get.length == 1
         bottomButtons.children.clear()
-        bottomButtons.children.addAll(chooseIsometry, chooseSection, applyConfirmIsometryButton, applyIsometryCancelButton)
+
+        isometry match {
+            case Rotation(_) =>
+                bottomButtons.children.add(chooseRotationDirection)
+            case Reflection(_) =>
+                bottomButtons.children.add(chooseIsometryDirection)
+            case CentralSymmetry(_) =>
+        }
+
+        if (isLast) {
+            bottomButtons.children.addAll(invert, confirmIsometryButton, cancelApplyingIsometry)
+        } else {
+            bottomButtons.children.addAll(invert, nextIsometryButton, cancelApplyingIsometry)
+        }
     }
 
     private def chooseSectorView(): Unit = {
@@ -625,21 +660,11 @@ class EditScene(level: Level) extends Scene {
         bottomButtons.children.addAll(chooseSectionDoneButton)
     }
 
-    private def advancedIsometryView(): Unit = {
-        advancedChainInvertSelection.value = null
-
+    private def composeView(): Unit = {
         bottomButtons.children.clear()
-        bottomButtons.children.addAll(advancedChainInvertSelection, advancedCancelButton)
-    }
-
-    private def advancedInvertView(): Unit = {
-        bottomButtons.children.clear()
-        bottomButtons.children.addAll(advancedChainInvertSelection, advancedInvertSelectIsometry, advancedInvertConfirmButton, advancedCancelButton)
-    }
-
-    private def advancedChainView(): Unit = {
-        bottomButtons.children.clear()
-        bottomButtons.children.addAll(advancedChainInvertSelection, advancedChainSelectIsometry, advancedChainSelectSecond, advancedChainButton, advancedCancelButton)
+        composeChainBox.children.clear()
+        composeChainBox.children.add(composeChooseIsometry)
+        bottomButtons.children.addAll(compositionName, composeChainBox, composeConfirmButtom, composeCancelButton)
     }
 
     // Behavior
@@ -733,99 +758,16 @@ class EditScene(level: Level) extends Scene {
     }
 
     isometricsButton.onAction = _ => {
-        isometricsView()
-    }
-
-    newIsometryButton.onAction = _ => {
-        newIsometryView()
-    }
-
-    advancedIsometryButton.onAction = _ => {
-        advancedIsometryView()
-    }
-
-    isometryCancelButton.onAction = _ => {
-        mainView()
-    }
-
-    isometryType.onAction = _ => {
-        if (isometryType.value.value == AxialReflection) {
-            isometryDirectionBox.items = ObservableBuffer(Row, Column, Diagonal, Antidiagonal)
-            isometryDirectionBox.value = Row
-            isometryRotationDirection.visible = false
-        } else {
-            isometryDirectionBox.items = ObservableBuffer(Field)
-            isometryDirectionBox.value = Field
-            isometryRotationDirection.visible = true
-        }
-    }
-
-    newIsometryCancelButton.onAction = _ => {
-        isometricsView()
-    }
-
-    newIsometryConfirmButton.onAction = _ => {
-        val newIsometry = new Isometry(
-            newIsometryName.text.value,
-            isometryExpansionType.value.value,
-            isometryTransparencyType.value.value,
-            isometryType.value.value,
-            isometryDirectionBox.value.value,
-            if (isometryRotationDirection.visible.value) isometryRotationDirection.value.value else Unused
-        )
-
-        newIsometryName.clear()
-        Isometry.allIsometries :+= newIsometry
-        updateAllIsometries()
-        isometricsView()
+        isometryView()
     }
 
     applyIsometryButton.onAction = _ => {
-        applyingIsometry = true
-        applyIsometryView()
-    }
+        if (chooseIsometry.value != null) {
+            applyingIsometry = true
+            isometryTypeList = Some(chooseIsometry.value.value.getChain)
 
-    chooseIsometry.onAction = _ => {
-        if (chooseIsometry.value.value != null) {
-            isometryDirection = chooseIsometry.value.value.isometryDirection
+            applyingIsometryView(isometryTypeList.get.head)
         }
-    }
-
-    applyConfirmIsometryButton.onAction = _ => {
-        if (sectorFirstPoint.isDefined && sectorSecondPoint.isDefined && isometryPivot.isDefined) {
-            val (newBoard, newSector, newPoint) = chooseIsometry.value.value.applyIsometry(
-                new Sector(sectorFirstPoint.get, sectorSecondPoint.get),
-                editFields,
-                isometryPivot.get
-            )
-
-            isometryPivot = Some(newPoint)
-            editFields = newBoard
-
-            if (newSector != null) {
-                sectorFirstPoint = Some(newSector.topLeftPoint)
-                sectorSecondPoint = Some(newSector.bottomRightPoint)
-                clearAllButNewSector(newSector)
-            } else {
-                sectorFirstPoint = None
-                sectorSecondPoint = None
-                clearAllMines()
-            }
-
-            repopulateBoard()
-            checkBoardSize()
-            checkNumberOfMines()
-        }
-    }
-
-    applyIsometryCancelButton.onAction = _ => {
-        applyingIsometry = false
-        isometryPivot = None
-        sectorFirstPoint = None
-        sectorSecondPoint = None
-        removeSectors()
-        deselectAllFields()
-        isometricsView()
     }
 
     chooseSection.onAction = _ => {
@@ -835,38 +777,139 @@ class EditScene(level: Level) extends Scene {
 
     chooseSectionDoneButton.onAction = _ => {
         chooseSectorMode = false
-        applyIsometryView()
+        isometryView()
     }
 
-    advancedCancelButton.onAction = _ => {
-        isometricsView()
+    cancelIsometryButton.onAction = _ => {
+        clearIsometryView(clearSector = true)
+        mainView()
     }
 
-    advancedChainInvertSelection.onAction = _ => {
-        if (advancedChainInvertSelection.value.value == "Invert") {
-            advancedInvertView()
+    cancelApplyingIsometry.onAction = _ => {
+        clearApplyIsometryView(clearSector = true)
+        isometryView()
+    }
+
+    nextIsometryButton.onAction = _ => {
+        isometryTypeList.get.head match {
+            case Rotation(_) =>
+                isometryArgsList = isometryArgsList :+ new IsometryArgs(
+                    Field,
+                    chooseRotationDirection.value.value,
+                    isometryPivot.get,
+                    invert.selected.value
+                )
+            case Reflection(_) =>
+                isometryArgsList = isometryArgsList :+ new IsometryArgs(
+                    isometryDirection,
+                    Unused,
+                    isometryPivot.get,
+                    invert.selected.value
+                )
+            case CentralSymmetry(_) =>
+                isometryArgsList = isometryArgsList :+ new IsometryArgs(
+                    Field,
+                    Unused,
+                    isometryPivot.get,
+                    invert.selected.value
+                )
+        }
+
+        isometryTypeList = Some(isometryTypeList.get.tail)
+        isometryPivot = None
+        invert.selected = false
+        clearAllSelectedFields()
+
+        isometryTypeList.get.head match
+            case Rotation(_) =>
+                isometryDirection = Field
+            case Reflection(_) =>
+                isometryDirection = Row
+            case CentralSymmetry(_) =>
+                isometryDirection = Field
+
+        applyingIsometryView(isometryTypeList.get.head)
+    }
+
+    confirmIsometryButton.onAction = _ => {
+        isometryTypeList.get.head match {
+            case Rotation(_) =>
+                isometryArgsList = isometryArgsList :+ new IsometryArgs(
+                    Field,
+                    chooseRotationDirection.value.value,
+                    isometryPivot.get,
+                    invert.selected.value
+                )
+            case Reflection(_) =>
+                isometryArgsList = isometryArgsList :+ new IsometryArgs(
+                    isometryDirection,
+                    Unused,
+                    isometryPivot.get,
+                    invert.selected.value
+                )
+            case CentralSymmetry(_) =>
+                isometryArgsList = isometryArgsList :+ new IsometryArgs(
+                    Field,
+                    Unused,
+                    isometryPivot.get,
+                    invert.selected.value
+                )
+        }
+
+        val (newSector: Sector, newBoard: Array[Array[EditField]]) = chooseIsometry.value.value.applyIsometry(
+            new Sector(sectorFirstPoint.get, sectorSecondPoint.get),
+            editFields,
+            isometryArgsList,
+            if (chooseExpansion.isSelected) Expanding else NonExpanding,
+            if (chooseTransparency.isSelected) Transparent else NonTransparent
+        )
+
+        editFields = newBoard
+
+        if (newSector != null) {
+            sectorFirstPoint = Some(newSector.topLeftPoint)
+            sectorSecondPoint = Some(newSector.bottomRightPoint)
         } else {
-            advancedChainView()
+            sectorFirstPoint = None
+            sectorSecondPoint = None
+            clearAllMines()
+        }
+
+        repopulateBoard()
+        clearBottomText()
+        checkBoardSize()
+        checkNumberOfMines()
+        clearApplyIsometryView(clearSector = false)
+        isometryView()
+    }
+
+    chooseIsometryDirection.onAction = _ => {
+        isometryDirection = chooseIsometryDirection.value.value
+        if (isometryPivot.nonEmpty) {
+            handleRightClick(isometryPivot.get.row, isometryPivot.get.col)
+            handleRightClick(isometryPivot.get.row, isometryPivot.get.col)
         }
     }
 
-    advancedInvertConfirmButton.onAction = _ => {
-        val selectedIsometry = advancedInvertSelectIsometry.value.value
-        Isometry.allIsometries :+= selectedIsometry.getInverse
-        updateAllIsometries()
-        isometricsView()
+    composeButton.onAction = _ => {
+        clearIsometryView(clearSector = true)
+        composeView()
     }
 
-    advancedChainSelectIsometry.onAction = _ => {
-        val selectedIsometry = advancedChainSelectIsometry.value.value
-        advancedChainSelectSecond.items = ObservableBuffer(Isometry.allIsometries.filter(isometry => isometry != selectedIsometry): _*)
+    composeChooseIsometry.onAction = _ => {
+        onComposeChain()
     }
 
-    advancedChainButton.onAction = _ => {
-        if (advancedChainSelectIsometry.value.value != null) {
-            advancedChainSelectIsometry.value.value.chain(advancedChainSelectSecond.value.value)
-            isometricsView()
-        }
+    composeConfirmButtom.onAction = _ => {
+        val composition = new Composition(compositionName.text.value, composeChain)
+        Isometry.allIsometries :+= composition
+        clearComposeView()
+        updateIsometries()
+        isometryView()
+    }
+
+    composeCancelButton.onAction = _ => {
+        isometryView()
     }
 }
 
