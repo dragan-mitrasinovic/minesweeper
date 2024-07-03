@@ -1,34 +1,47 @@
 package minesweeper.isometrics
 
-//import minesweeper.scenes.EditField
-//
-//case class Translation(override val name: String) extends Isometry(name) {
-//    def applyIsometry(sector: Sector, board: Array[Array[EditField]], isometryArgs: List[IsometryArgs], expanding: IsometryExpansionType, transparencyType: IsometryTransparencyType): (Sector, Array[Array[EditField]]) = {
-//        var inputBoard: Array[Array[EditField]] = board
-//        var inputSector: Sector = sector
-//
-//        if (expanding == Expanding) {
-//            val finalSector: Sector = getResultingSector(sector, isometryArgs)
-//            val expanded = expandBoard(finalSector, board, inputSector)
-//            inputBoard = expanded._1
-//            inputSector = expanded._2
-//        }
-//
-//        val finalSector: Sector = applyInChain(sector, isometryArgs)
-//        val newBoard = mapToFinalBoard(inputSector, finalSector, inputBoard, transparencyType)
-//
-//        val adjustedSector = cutOffSector(finalSector, newBoard)
-//
-//        (adjustedSector, newBoard)
-//    }
-//
-//    def applyInChain(sector: Sector, isometryArgs: List[IsometryArgs]): Sector = {
-//        
-//    }
-//
-//    def getResultingSector(sector: Sector, isometryArgs: List[IsometryArgs]): Sector = {
-//        
-//    }
-//
-//    def getChain: List[Isometry] = List(this)
-//}
+case class Translation(override val name: String) extends Isometry(name) {
+    override def applyInChain(sector: Sector, isometryArgs: List[IsometryArgs]): Sector = {
+        val indices = Array.ofDim[(Int, Int)](sector.indices.length, sector.indices(0).length)
+
+        val pivotX = isometryArgs.head.pivotPoint.row
+        val pivotY = isometryArgs.head.pivotPoint.col
+
+        val sectorHeight = sector.bottomRightPoint.row - sector.topLeftPoint.row
+        val sectorWidth = sector.bottomRightPoint.col - sector.topLeftPoint.col
+
+        var deltaX = pivotX - sector.bottomRightPoint.row
+        var deltaY = pivotY - sector.topLeftPoint.col
+
+        if (isometryArgs.head.inverted) {
+            deltaX = -deltaX
+            deltaY = -deltaY
+        }
+
+        val newSector = new Sector(
+            new Point(sector.topLeftPoint.row + deltaX, sector.topLeftPoint.col + deltaY),
+            new Point(sector.bottomRightPoint.row + deltaX, sector.bottomRightPoint.col + deltaY)
+        )
+
+        for (i <- sector.indices.indices; j <- sector.indices(0).indices) {
+            indices(i)(j) = (sector.indices(i)(j)._1 + deltaX, sector.indices(i)(j)._2 + deltaY)
+        }
+
+        newSector.indices = indices
+        newSector
+    }
+
+    override def getChain: List[Isometry] = List(this)
+
+    override def cloneIsometry(expanding: Boolean, transparent: Boolean): Isometry = {
+        if (expanding && transparent) {
+            new Translation(name) with Transparent with Expanding
+        } else if (expanding) {
+            new Translation(name) with Expanding
+        } else if (transparent) {
+            new Translation(name) with Transparent
+        } else {
+            Translation(name)
+        }
+    }
+}

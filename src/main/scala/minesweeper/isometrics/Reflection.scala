@@ -53,4 +53,16 @@ case class Reflection(override val name: String) extends Isometry(name) {
     }
 
     override def getChain: List[Isometry] = List(this)
+
+    override def cloneIsometry(expanding: Boolean, transparent: Boolean): Isometry = {
+        if (expanding && transparent) {
+            new Reflection(name) with Transparent with Expanding
+        } else if (expanding) {
+            new Reflection(name) with Expanding
+        } else if (transparent) {
+            new Reflection(name) with Transparent
+        } else {
+            Reflection(name)
+        }
+    }
 }

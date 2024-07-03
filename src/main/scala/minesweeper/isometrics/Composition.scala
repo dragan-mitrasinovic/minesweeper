@@ -19,4 +19,16 @@ class Composition(override val name: String, val isometries: List[Isometry]) ext
     override def getChain: List[Isometry] = {
         isometries.flatMap(_.getChain)
     }
+
+    override def cloneIsometry(expanding: Boolean, transparent: Boolean): Isometry = {
+        if (expanding && transparent) {
+            new Composition(name, isometries) with Transparent with Expanding
+        } else if (expanding) {
+            new Composition(name, isometries) with Expanding
+        } else if (transparent) {
+            new Composition(name, isometries) with Transparent
+        } else {
+            Composition(name, isometries)
+        }
+    }
 }

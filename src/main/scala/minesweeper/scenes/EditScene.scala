@@ -646,6 +646,7 @@ class EditScene(level: Level) extends Scene {
             case Reflection(_) =>
                 bottomButtons.children.add(chooseIsometryDirection)
             case CentralSymmetry(_) =>
+            case Translation(_) =>
         }
 
         if (isLast) {
@@ -813,6 +814,13 @@ class EditScene(level: Level) extends Scene {
                     isometryPivot.get,
                     invert.selected.value
                 )
+            case Translation(_) =>
+                isometryArgsList = isometryArgsList :+ new IsometryArgs(
+                    Field,
+                    Unused,
+                    isometryPivot.get,
+                    invert.selected.value
+                )
         }
 
         isometryTypeList = Some(isometryTypeList.get.tail)
@@ -826,6 +834,8 @@ class EditScene(level: Level) extends Scene {
             case Reflection(_) =>
                 isometryDirection = Row
             case CentralSymmetry(_) =>
+                isometryDirection = Field
+            case Translation(_) =>
                 isometryDirection = Field
 
         applyingIsometryView(isometryTypeList.get.head)
@@ -854,21 +864,28 @@ class EditScene(level: Level) extends Scene {
                     isometryPivot.get,
                     invert.selected.value
                 )
+            case Translation(_) =>
+                isometryArgsList = isometryArgsList :+ new IsometryArgs(
+                    Field,
+                    Unused,
+                    isometryPivot.get,
+                    invert.selected.value
+                )
         }
 
-        val (newSector: Sector, newBoard: Array[Array[EditField]]) = chooseIsometry.value.value.applyIsometry(
-            new Sector(sectorFirstPoint.get, sectorSecondPoint.get),
-            editFields,
-            isometryArgsList,
-            if (chooseExpansion.isSelected) Expanding else NonExpanding,
-            if (chooseTransparency.isSelected) Transparent else NonTransparent
-        )
+        val (newSector: Option[Sector], newBoard: Array[Array[EditField]]) =
+            chooseIsometry.value.value.cloneIsometry(chooseExpansion.selected.value, chooseTransparency.selected.value)
+              .applyIsometry(
+                  new Sector(sectorFirstPoint.get, sectorSecondPoint.get),
+                  editFields,
+                  isometryArgsList,
+              )
 
         editFields = newBoard
 
-        if (newSector != null) {
-            sectorFirstPoint = Some(newSector.topLeftPoint)
-            sectorSecondPoint = Some(newSector.bottomRightPoint)
+        if (newSector.nonEmpty) {
+            sectorFirstPoint = Some(newSector.get.topLeftPoint)
+            sectorSecondPoint = Some(newSector.get.bottomRightPoint)
         } else {
             sectorFirstPoint = None
             sectorSecondPoint = None

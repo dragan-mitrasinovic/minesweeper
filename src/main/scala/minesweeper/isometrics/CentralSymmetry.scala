@@ -16,4 +16,16 @@ case class CentralSymmetry(override val name: String) extends Isometry(name) {
     }
 
     override def getChain: List[Isometry] = List(this)
+
+    override def cloneIsometry(expanding: Boolean, transparent: Boolean): Isometry = {
+        if (expanding && transparent) {
+            new CentralSymmetry(name) with Transparent with Expanding
+        } else if (expanding) {
+            new CentralSymmetry(name) with Expanding
+        } else if (transparent) {
+            new CentralSymmetry(name) with Transparent
+        } else {
+            CentralSymmetry(name)
+        }
+    }
 }

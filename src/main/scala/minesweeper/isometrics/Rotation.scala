@@ -59,4 +59,16 @@ case class Rotation(override val name:String) extends Isometry(name) {
     }
 
     override def getChain: List[Isometry] = List(this)
+
+    override def cloneIsometry(expanding: Boolean, transparent: Boolean): Isometry = {
+        if (expanding && transparent) {
+            new Rotation(name) with Transparent with Expanding
+        } else if (expanding) {
+            new Rotation(name) with Expanding
+        } else if (transparent) {
+            new Rotation(name) with Transparent
+        } else {
+            Rotation(name)
+        }
+    }
 }
