@@ -11,6 +11,7 @@ import scalafx.scene.control.*
 import scalafx.scene.layout.{BorderPane, GridPane, HBox, VBox}
 
 import java.io.PrintWriter
+import java.nio.file.Paths
 import scala.language.postfixOps
 
 class EditScene(level: Level) extends Scene {
@@ -317,7 +318,7 @@ class EditScene(level: Level) extends Scene {
                     pw.println()
                 }
                 pw.close()
-                Level.allLevels :+= new Level(s"gameData\\levels\\$levelName.txt")
+                Level.allLevels :+= new Level(Paths.get("gameData", "levels", s"$levelName.txt").toString)
             case None =>
         }
     }

@@ -24,7 +24,11 @@ object Minesweeper extends JFXApp3 {
             height = 800
             resizable = false
             scene = StartScene
-            icons += new Image("minesweeper/resources/mine.png")
+            // Add icon if resource is available
+            val iconStream = getClass.getResourceAsStream("/mine.png")
+            if (iconStream != null) {
+                icons += new Image(iconStream)
+            }
         }
     }
 }

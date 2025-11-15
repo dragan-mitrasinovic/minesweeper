@@ -32,7 +32,7 @@ class Level(fileName: String) {
         if (fieldNumber <= 100 && mineNumber <= 10) Easy
         else if (fieldNumber <= 300 && mineNumber <= 50) Medium
         else Hard
-    var name: String = fileName.split("\\\\").last.split('.').head
+    var name: String = fileName.split("[\\\\/]").last.split('.').head
 
     // Functions
     private def surroundingMines(matrix: Array[Array[Int]], i: Int, j: Int): Int = {
@@ -64,7 +64,7 @@ object Level {
     }
 
     private def loadScores(): Unit = {
-        val source = Source.fromFile("gameData\\scores.txt")
+        val source = Source.fromFile(Paths.get("gameData", "scores.txt").toString)
 
         for (line <- source.getLines()) {
             val Array(levelName, playerName, timeInSeconds, moves) = line.split(",")
@@ -75,7 +75,7 @@ object Level {
     }
 
     def saveScores(): Unit = {
-        val pw = new java.io.PrintWriter(new java.io.File("gameData\\scores.txt"))
+        val pw = new java.io.PrintWriter(Paths.get("gameData", "scores.txt").toFile)
         allScores.foreach { score =>
             pw.write(s"${score.levelName},${score.playerName},${score.time},${score.moves}\n")
         }
@@ -84,7 +84,7 @@ object Level {
 
     def saveLevels(): Unit = {
         allLevels.foreach { level =>
-            val pw = new PrintWriter(s"gameData\\levels\\${level.name}.txt")
+            val pw = new PrintWriter(Paths.get("gameData", "levels", s"${level.name}.txt").toFile)
             level.fields.foreach { row =>
                 pw.write(row.map {
                     case -1 => '#'
