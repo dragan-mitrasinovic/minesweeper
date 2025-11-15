@@ -1,8 +1,5 @@
 # Minesweeper 💣
 
-## 🎮 Demo
-![Minesweeper Gameplay Demo](assets/demo.gif)
-
 ---
 
 A feature-rich Minesweeper game implementation in Scala 3 with JavaFX, featuring classic gameplay mechanics, custom level design, and advanced level editing capabilities using geometric transformations.
@@ -10,6 +7,9 @@ A feature-rich Minesweeper game implementation in Scala 3 with JavaFX, featuring
 > 🎓 *Developed as a project for Functional Programming (13M111FP) at the University of Belgrade, School of Electrical Engineering*
 
 ---
+
+## 🎮 Demo
+![Minesweeper Gameplay Demo](assets/demo.gif)
 
 ## ✨ Features
 
